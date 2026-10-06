@@ -6,9 +6,7 @@ export function handleErrors(e: any, response: Response) {
     console.error(e);
 
     if (e instanceof Prisma.PrismaClientKnownRequestError) {
-        return response
-        .status(prismaErrorCodes[e.code as keyof typeof prismaErrorCodes] || 500).json(e.message)
-        .json(e.message.split("\n").pop());
+        return response.status(prismaErrorCodes[e.code as keyof typeof prismaErrorCodes] || 500).json(e.message.split("\n").pop());
     }
 
     return response.status(500).json("Unknown error. Try again later");

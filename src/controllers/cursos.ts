@@ -5,13 +5,13 @@ import { handleErrors } from "../helpers/handleErrors";
 export default {
     list: async (request: Request, response: Response) => {
         try {
-            const alunos = await prisma.aluno.findMany({
+            const cursos = await prisma.curso.findMany({
                 include: {
-                    cursos: true,
+                    alunos: true,
                 },
             });
 
-            return response.status(200).json(alunos);
+            return response.status(200).json(cursos);
         } catch (e) {
             handleErrors(e, response);
         }
@@ -20,16 +20,16 @@ export default {
     getById: async (request: Request, response: Response) => {
         try {
             const { id } = request.params;
-            const aluno = await prisma.aluno.findUnique({
+            const curso = await prisma.curso.findUnique({
                 where: {
                     id: +id,
                 },
                 include: {
-                    cursos: true,
+                    alunos: true,
                 },
             });
 
-            return response.status(200).json(aluno);
+            return response.status(200).json(curso);
         } catch (e) {
             return handleErrors(e, response);
         }
@@ -37,25 +37,21 @@ export default {
 
     create: async (request: Request, response: Response) => {
         try {
-            const { matricula, cpf, nome, nascimento, email, telefone, endereco } = request.body;
+            const { nome, cargaHoraria, descricao } = request.body;
 
-            if (!matricula || !cpf || !nome || !email) {
-                return response.status(400).json("Dados do aluno incompletos.")
+            if (!nome || !cargaHoraria || !descricao) {
+                return response.status(400).json("Dados do curso incompletos.")
             }
 
-            const aluno = await prisma.aluno.create({
+            const curso = await prisma.curso.create({
                 data: {
-                    matricula,
-                    cpf,
                     nome,
-                    nascimento: new Date(nascimento),
-                    email,
-                    telefone,
-                    endereco,
+                    cargaHoraria,
+                    descricao
                 }
             })
 
-            return response.status(201).json(aluno);
+            return response.status(201).json(curso);
         } catch (e) {
             return handleErrors(e, response);
         }
@@ -64,44 +60,38 @@ export default {
     update: async (request: Request, response: Response) => {
         try {
             const { id } = request.params;
-            const { matricula, cpf, nome, nascimento, email, telefone, endereco } =
-                request.body;
+            const { nome, duracao, descricao } = request.body;
 
-            const aluno = await prisma.aluno.update({
+            const curso = await prisma.curso.update({
                 where: {
                     id: +id,
                 },
                 data: {
-                    matricula,
-                    cpf,
                     nome,
-                    nascimento: nascimento ? new Date(nascimento) : undefined,
-                    email,
-                    telefone,
-                    endereco,
+                    duracao,
+                    descricao
                 }
             });
 
-            return response.status(200).json(aluno);
+            return response.status(200).json(curso);
         } catch (e) {
             return handleErrors(e, response);
         }
     },
 
     delete: async (request: Request, response: Response) => {
-
         try {
             const { id } = request.params;
 
-            const aluno = await prisma.aluno.delete({
+            const curso = await prisma.curso.delete({
                 where: {
                     id: +id,
                 }
             });
 
-            return response.status(200).json(aluno);
+            return response.status(200).json(curso);
         } catch (e) {
             return handleErrors(e, response);
         }
-    }
+    },
 }
