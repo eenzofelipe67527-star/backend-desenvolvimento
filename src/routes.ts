@@ -1,6 +1,7 @@
 import { Router } from "express";
 import alunoController from "./controllers/aluno";
 import cursoController from "./controllers/cursos";
+import matriculaController from "./controllers/matricula";
 
 const routes = Router();
 
@@ -21,5 +22,9 @@ routes.get("/cursos/:id", cursoController.getById);
 routes.post("/cursos", cursoController.create);
 routes.put("/cursos/:id", cursoController.update);
 routes.delete("/cursos/:id", cursoController.delete);
+
+// Rotas de matrícula
+routes.post("/matriculas/:id", matriculaController.create);
+routes.delete("/matriculas/:id", matriculaController.delete);
 
 export default routes;
