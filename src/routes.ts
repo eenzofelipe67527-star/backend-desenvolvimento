@@ -27,4 +27,6 @@ routes.delete("/cursos/:id", cursoController.delete);
 routes.post("/matriculas/:id", matriculaController.create);
 routes.delete("/matriculas/:id", matriculaController.delete);
 
+// Rotas de funcionários
+routes.post ("/login")
 export default routes;
